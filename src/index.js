@@ -70,6 +70,12 @@ app.get("/statement/date", verifyIfAccountExists, (req, res) => {
     return res.json(statement);
 })
 
+app.get("/account", verifyIfAccountExists, (req, res) => {
+    const { customer } = req;
+
+    return res.json(customer);
+})
+
 app.post("/deposit", verifyIfAccountExists, (req, res) => {
     const { description, amount } = req.body;
     const { customer } = req;
@@ -100,6 +106,21 @@ app.post("/withdraw", verifyIfAccountExists, (req, res) => {
     })
 
     return res.status(201).send();
+})
+
+app.put("/account", verifyIfAccountExists, (req, res) => {
+    const { customer } = req;
+    const { name } = req.body;
+
+    customer.name = name;
+    return res.status(201).send();
+})
+
+app.delete("/account", verifyIfAccountExists, (req, res) => {
+    const { customer } = req;
+
+    customers.splice(customer, 1);
+    return res.send();
 })
 
 app.listen(3000, (err) => {
