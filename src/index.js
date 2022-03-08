@@ -58,6 +58,18 @@ app.get("/statement", verifyIfAccountExists, (req, res) => {
     return res.json(customer.statement);
 })
 
+app.get("/statement/date", verifyIfAccountExists, (req, res) => {
+    const { date } = req.query;
+    const { customer } = req;
+
+    const dateFormat = new Date(date + " 00:00");
+
+    const statement = customer.statement.find((statement) => statement.date.toDateString() === dateFormat.toDateString())
+
+    console.log(statement)
+    return res.json(statement);
+})
+
 app.post("/deposit", verifyIfAccountExists, (req, res) => {
     const { description, amount } = req.body;
     const { customer } = req;
@@ -72,7 +84,7 @@ app.post("/deposit", verifyIfAccountExists, (req, res) => {
 })
 
 app.post("/withdraw", verifyIfAccountExists, (req, res) => {
-    const { description, amount } = req.body;
+    const { amount } = req.body;
     const { customer } = req;
 
     const balance = getBalance(customer.statement);
